@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Body
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel
 from typing import Optional
 from jwt_manager import create_token
@@ -43,8 +43,12 @@ def message():
     return HTMLResponse("<h1>Hello! World</h1> \n <p> So proud this works!!! </p>")
 
 @app.post('/login', tags=['auth'])
-def login(user: User):
-    return user
+def login(email: str = Body(), password: str = Body()):
+    if email == "admin@vigodev.net" and password == "admin":
+        token = create_token(data=[{"email":email, "password":password}])
+        print(f"The token is: {token}")
+        return JSONResponse(content=token, status_code=200)
+    return []
 
 @app.get('/test', tags=['Test'])
 def test():
