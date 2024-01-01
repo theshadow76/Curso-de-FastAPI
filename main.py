@@ -50,3 +50,7 @@ def get_movies_by_category(category: str, year: int):
         if item["category"] == category and item["year"] == year:
             return item
     return []
+
+@app.post('/movies/add', tags=['Movies'])
+def create_movie(id: int, title: str, overview: str, year: int, rating: float, category: str):
+    return title
