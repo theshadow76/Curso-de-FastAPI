@@ -74,3 +74,11 @@ def update_movie(id: int, title: str = Body(), overview: str = Body(), year: int
             item['category'] = category
             return movies
     return []
+
+@app.delete('/movies/delete/{id}', tags=['Movies'])
+def delete_movie(id: int):
+    for item in movies:
+        if item['id'] == id:
+            movies.remove(item)
+            return movies
+    return []
