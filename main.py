@@ -13,6 +13,14 @@ movies = [
         "year" : "2009",
         "rating" : 9.8,
         "category" : "Accion"
+    },
+    {
+        "id" : 2,
+        "title" : "movie 1",
+        "overview" : "la mejor pelicula del mundo",
+        "year" : "2009",
+        "rating" : 9.8,
+        "category" : "Accion"
     }
 ]
 
@@ -28,3 +36,14 @@ def test():
 @app.get('/movies', tags=['Movies'])
 def get_movies():
     return movies
+
+@app.get('/movies/{id}', tags=['Movies'])
+def get_movie(id: int):
+    for item in movies:
+        if item["id"] == id:
+            return item
+    return []
+
+@app.get('/movies/', tags=['Movies'])
+def get_movies_by_category(category: str):
+    return category
