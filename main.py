@@ -53,4 +53,12 @@ def get_movies_by_category(category: str, year: int):
 
 @app.post('/movies/add', tags=['Movies'])
 def create_movie(id: int = Body(), title: str = Body(), overview: str = Body(), year: int = Body(), rating: float = Body(), category: str = Body()):
-    return title
+    movies.append({
+        "id" : id,
+        "title" : title,
+        "overview" : overview,
+        "year" : year,
+        "rating" : rating,
+        "category" : category
+    })
+    return movies
