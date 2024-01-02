@@ -6,6 +6,6 @@ def create_token(data):
     return token
 
 def validate_token(token: str):
-    data = decode(token, key="my_secret_key", algorithms=['HS256'])
-    print(f"The data returned is: {data}")
+    data = decode(jwt=token, key="my_secret_key", algorithms=['HS256'])
+    print(f"The data returned is: {data} and the token is: {token}")
     return data

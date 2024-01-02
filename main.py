@@ -14,6 +14,7 @@ app.version = "0.0.1"
 class JWTBearer(HTTPBearer):
     async def __call__(self, request: Request):
         auth = await super().__call__(request)
+        print(f"The auth is {auth.credentials} and the full data is: {auth}")
         data = validate_token(auth.credentials)
         print(f"The email is: {data['email']} and the full data is: {data}")
         if data['email'] != "admin@vigodev.net":
