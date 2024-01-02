@@ -6,7 +6,7 @@ from typing import Any, Coroutine, Optional
 from jwt_manager import create_token, validate_token
 from fastapi.security import HTTPBearer
 from config.database import Session, engine, Base
-from models.movie import Movie
+from models.movie import Movie as MovieModel
 
 
 app = FastAPI()
@@ -92,6 +92,11 @@ def get_movies_by_category(category: str, year: int):
 
 @app.post('/movies/add', tags=['Movies'])
 def create_movie(id: int = Body(), title: str = Body(), overview: str = Body(), year: int = Body(), rating: float = Body(), category: str = Body()):
+    db = Session()
+
+    new_movie = MovieModel(id, title, overview, year, rating, category)
+    db.add(new_movie)
+    db.commit()
     movies.append({
         "id" : id,
         "title" : title,
