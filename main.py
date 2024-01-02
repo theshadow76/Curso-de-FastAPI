@@ -1,11 +1,23 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, Body, HTTPException, Request, Depends
 from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.security.http import HTTPAuthorizationCredentials
 from pydantic import BaseModel
-from typing import Optional
-from jwt_manager import create_token
+from typing import Any, Coroutine, Optional
+from jwt_manager import create_token, validate_token
+from fastapi.security import HTTPBearer
+
+
 app = FastAPI()
 app.title = "Mi app con FastAPI"
 app.version = "0.0.1"
+
+class JWTBearer(HTTPBearer):
+    async def __call__(self, request: Request):
+        auth = await super().__call__(request)
+        data = validate_token(auth.credentials)
+        print(f"The email is: {data['email']} and the full data is: {data}")
+        if data['email'] != "admin@vigodev.net":
+            raise HTTPException(status_code=403, detail="Credenciales son invalidas")
 
 class User(BaseModel):
     email:str
@@ -55,7 +67,7 @@ def test():
     """This is for testing purposes"""
     return "this is a test"
 
-@app.get('/movies', tags=['Movies'])
+@app.get('/movies', tags=['Movies'], dependencies=[Depends(JWTBearer())])
 def get_movies():
     return movies
 
